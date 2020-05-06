@@ -17,7 +17,7 @@ from tasks.__init__ import *
 project = Project("projects/single", "sine1")
 
 # 2. Loading an arff file
-labels, attributes, stream_records = ARFFReader.read("data_streams/sine1_w_50_n_0.1/sine1_w_50_n_0.1_101.arff")
+labels, attributes, stream_records = ARFFReader.read("data_streams/_synthetic/SINE1/SINE1.arff")
 attributes_scheme = AttributeScheme.get_scheme(attributes)
 
 # 3. Initializing a Learner

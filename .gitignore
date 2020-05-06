@@ -1,0 +1,4 @@
+*pycache*
+*.DS_Store
+data_streams/_synthetic/
+projects*

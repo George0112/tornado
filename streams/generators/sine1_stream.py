@@ -43,41 +43,41 @@ class SINE1:
             record = self.create_record(dist_id)
             self.__RECORDS.append(list(record))
 
-        # [2] TRANSITION
-        for i in range(1, self.__NUM_DRIFTS + 1):
-            transition = []
-            if (i % 2) == 1:
-                for j in range(0, self.__W):
-                    if random.random() < Transition.sigmoid(j, self.__W):
-                        record = self.create_record(1)
-                    else:
-                        record = self.create_record(0)
-                    transition.append(list(record))
-            else:
-                for j in range(0, self.__W):
-                    if random.random() < Transition.sigmoid(j, self.__W):
-                        record = self.create_record(0)
-                    else:
-                        record = self.create_record(1)
-                    transition.append(list(record))
-            starting_index = i * self.__CONCEPT_LENGTH
-            ending_index = starting_index + self.__W
-            self.__RECORDS[starting_index: ending_index] = transition
+        # # [2] TRANSITION
+        # for i in range(1, self.__NUM_DRIFTS + 1):
+        #     transition = []
+        #     if (i % 2) == 1:
+        #         for j in range(0, self.__W):
+        #             if random.random() < Transition.sigmoid(j, self.__W):
+        #                 record = self.create_record(1)
+        #             else:
+        #                 record = self.create_record(0)
+        #             transition.append(list(record))
+        #     else:
+        #         for j in range(0, self.__W):
+        #             if random.random() < Transition.sigmoid(j, self.__W):
+        #                 record = self.create_record(0)
+        #             else:
+        #                 record = self.create_record(1)
+        #             transition.append(list(record))
+        #     starting_index = i * self.__CONCEPT_LENGTH
+        #     ending_index = starting_index + self.__W
+        #     self.__RECORDS[starting_index: ending_index] = transition
 
         # [3] ADDING NOISE
-        if len(self.__NOISE_LOCATIONS) != 0:
-            self.add_noise()
+        # if len(self.__NOISE_LOCATIONS) != 0:
+        #     self.add_noise()
 
         self.write_to_arff(output_path + ".arff")
 
     def create_record(self, dist_id):
         x, y, c = self.create_attribute_values()
-        if random.random() < 0.5:
-            while c != 'p':
-                x, y, c = self.create_attribute_values()
-        else:
-            while c != 'n':
-                x, y, c = self.create_attribute_values()
+        # if random.random() < 0.5:
+        #     while c != 'p':
+        #         x, y, c = self.create_attribute_values()
+        # else:
+        #     while c != 'n':
+        #         x, y, c = self.create_attribute_values()
         if dist_id == 1:
             c = 'n' if c == 'p' else 'p'
         return x, y, c

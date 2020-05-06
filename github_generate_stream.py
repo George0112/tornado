@@ -9,7 +9,7 @@ import os
 
 from streams.generators.__init__ import *
 
-stream_name = "led"
+stream_name = "EXPO"
 
 project_path = "data_streams/_synthetic/" + stream_name + "/"
 if not os.path.exists(project_path):
@@ -17,5 +17,5 @@ if not os.path.exists(project_path):
 
 file_path = project_path + stream_name
 
-stream_generator = LEDConceptDrift(concept_length=25000)
+stream_generator = EXPO(concept_length=20000)
 stream_generator.generate(file_path)
