@@ -17,5 +17,5 @@ if not os.path.exists(project_path):
 
 file_path = project_path + stream_name
 
-stream_generator = EXPO(concept_length=20000)
+stream_generator = EXPO(concept_length=500)
 stream_generator.generate(file_path)

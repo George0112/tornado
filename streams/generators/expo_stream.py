@@ -5,7 +5,7 @@ import math
 from streams.generators.tools.transition_functions import Transition
 
 class EXPO:
-    def __init__(self, concept_length=200000, transition_length=50, noise_rate=0.1, random_seed=1):
+    def __init__(self, concept_length=2000, transition_length=50, noise_rate=0.1, random_seed=1):
         self.__INSTANCES_NUM = 5 * concept_length
         self.__CONCEPT_LENGTH = concept_length
         self.__NUM_DRIFTS = 4
@@ -43,21 +43,20 @@ class EXPO:
     def create_record(self, dist_id):
         x, y = self.create_attribute_value()
         if dist_id == 1:
-            y = -1*y
-
+            y = 2*y+100
         return x, y
 
     @staticmethod
     def create_attribute_value():
         x = random.uniform(0, 10)
-        y = math.pow(math.e, x)
+        y = math.pow(math.e, x) * random.uniform(0.9, 1.1)
         return x,y
 
     def add_noise(self):
         for i in range(0, len(self.__NOISE_LOCATIONS)):
             noise_spot = self.__NOISE_LOCATIONS[i]
             y = self.__RECORDS[noise_spot][1]
-            self.__RECORDS[noise_spot][1] = -1*y
+            self.__RECORDS[noise_spot][1] = y*random.random()
 
     def write_to_arff(self, output_path):
         arff_writer = open(output_path, "w")
