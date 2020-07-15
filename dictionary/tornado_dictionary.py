@@ -28,6 +28,7 @@ class TornadoDic:
     NN = "NN"
     K_NN = "K NEAREST NEIGHBOURS"
     KNN = "KNN"
+    CATSDOGS = "CATSDOGS"
 
     MDDM_A = "MDDM.A"
     MDDM_G = "MDDM.G"

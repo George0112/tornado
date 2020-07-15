@@ -30,7 +30,7 @@ class SuperClassifier:
 
         # THE _ACTIVE ATTRIBUTE IS USED TO SHOW WHETHER A CLASSIFIER IS SUSPENDED OR NOT
         self._ACTIVE = True
-        self._IS_READY = False
+        self._IS_READY = True
 
         self.__init_confusion_matrix()
         self.__init_global_confusion_matrix()
@@ -104,7 +104,7 @@ class SuperClassifier:
         self.NUMBER_OF_INSTANCES_OBSERVED = 0
         self._TRAINING_TIME = 0
         self._TESTING_TIME = 0
-        self._IS_READY = False
+        self._IS_READY = True
         self._ACTIVE = True
 
         self.reset_confusion_matrix()

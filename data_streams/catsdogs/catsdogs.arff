@@ -1,0 +1,5 @@
+@relation SINE1
+@attribute x string
+@attribute class {cat,dog}
+
+@data

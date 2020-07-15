@@ -39,8 +39,8 @@ class PredictionEvaluator:
 
     @staticmethod
     def calculate_accuracy(confusion_matrix):
-        total_sum = 0
-        diagonal_sum = 0
+        total_sum = 1
+        diagonal_sum = 1
         for k1, v1 in confusion_matrix.items():
             for k2, v2 in confusion_matrix[k1].items():
                 if k1 == k2:

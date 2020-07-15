@@ -9,7 +9,7 @@ import os
 
 from streams.generators.__init__ import *
 
-stream_name = "EXPO"
+stream_name = "SINE1"
 
 project_path = "data_streams/_synthetic/" + stream_name + "/"
 if not os.path.exists(project_path):

@@ -17,14 +17,19 @@ from tasks.__init__ import *
 project = Project("projects/single", "sine1")
 
 # 2. Loading an arff file
-labels, attributes, stream_records = ARFFReader.read("data_streams/_synthetic/SINE1/SINE1.arff")
+# labels, attributes, stream_records = ARFFReader.read("data_streams/sine1_w_50_n_0.1/sine1_w_50_n_0.1_101.arff")
+labels, attributes, stream_records = ARFFReader.read("data_streams/catsdogs/catsdogs.arff")
 attributes_scheme = AttributeScheme.get_scheme(attributes)
 
+print(labels, attributes)
+print(attributes_scheme)
+
 # 3. Initializing a Learner
-learner = NaiveBayes(labels, attributes_scheme['nominal'])
+# learner = NaiveBayes(labels, attributes_scheme['nominal'])
+learner = Catsdogs(labels, attributes_scheme['nominal'])
 
 # 4. Initializing a drift detector
-detector = FHDDM(n=100)
+detector = FHDDM(n=50)
 actual_drift_points = [20000, 40000, 60000, 80000]
 drift_acceptance_interval = 250
 

@@ -57,37 +57,49 @@ class PrequentialDriftEvaluator:
     def run(self, stream, random_seed=1):
 
         random.seed(random_seed)
+        import socket
+        HOST = '0.0.0.0'
+        PORT = 8000
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.bind((HOST, PORT))
+        server.listen(10)
+        # for record in stream:
+        while True:
 
-        for record in stream:
-
+            conn, addr = server.accept()
+            clientMessage = str(conn.recv(1024), encoding='utf-8')
             self.__instance_counter += 1
+            record = clientMessage.split(',')
 
-            percentage = (self.__instance_counter / len(stream)) * 100
-            print("%0.2f" % percentage + "% of instances are prequentially processed!", end="\r")
+            # percentage = (self.__instance_counter / len(stream)) * 100
+            # print("%0.2f" % percentage + "% of instances are prequentially processed!", end="\r")
 
-            if record.__contains__("?"):
-                self.__num_rubbish += 1
-                continue
-
+            # if record.__contains__("?"):
+            #     self.__num_rubbish += 1
+            #     continue
+            
+            # print(record)
+            # break
             # ---------------------
             #  Data Transformation
             # ---------------------
             r = copy.copy(record)
-            for k in range(0, len(r) - 1):
-                if self.learner.LEARNER_CATEGORY == TornadoDic.NOM_CLASSIFIER and self.__attributes[k].TYPE == TornadoDic.NUMERIC_ATTRIBUTE:
-                    r[k] = Discretizer.find_bin(r[k], self.__nominal_attribute_scheme[k])
-                elif self.learner.LEARNER_CATEGORY == TornadoDic.NUM_CLASSIFIER and self.__attributes[k].TYPE == TornadoDic.NOMINAL_ATTRIBUTE:
-                    r[k] = NominalToNumericTransformer.map_attribute_value(r[k], self.__numeric_attribute_scheme[k])
-            # NORMALIZING NUMERIC DATA
-            if self.learner.LEARNER_CATEGORY == TornadoDic.NUM_CLASSIFIER:
-                r[0:len(r) - 1] = Normalizer.normalize(r[0:len(r) - 1], self.__numeric_attribute_scheme)
+            print(r)
+            # for k in range(0, len(r) - 1):
+            #     if self.learner.LEARNER_CATEGORY == TornadoDic.NOM_CLASSIFIER and self.__attributes[k].TYPE == TornadoDic.NUMERIC_ATTRIBUTE:
+            #         r[k] = Discretizer.find_bin(r[k], self.__nominal_attribute_scheme[k])
+            #     elif self.learner.LEARNER_CATEGORY == TornadoDic.NUM_CLASSIFIER and self.__attributes[k].TYPE == TornadoDic.NOMINAL_ATTRIBUTE:
+            #         r[k] = NominalToNumericTransformer.map_attribute_value(r[k], self.__numeric_attribute_scheme[k])
+            # # NORMALIZING NUMERIC DATA
+            # if self.learner.LEARNER_CATEGORY == TornadoDic.NUM_CLASSIFIER:
+            #     r[0:len(r) - 1] = Normalizer.normalize(r[0:len(r) - 1], self.__numeric_attribute_scheme)
 
             # ----------------------
             #  Prequential Learning
             # ----------------------
             if self.learner.is_ready():
 
-                real_class = r[len(r) - 1]
+                real_class = r[-1]
                 predicted_class = self.learner.do_testing(r)
 
                 prediction_status = True
@@ -103,7 +115,7 @@ class PrequentialDriftEvaluator:
                     self.__located_drift_points.append(self.__instance_counter)
                     print("\n ->>> " + self.learner.LEARNER_NAME.title() + " faced a drift at instance " +
                           str(self.__instance_counter) + ".")
-                    print("%0.2f" % percentage, " of instances are prequentially processed!", end="\r")
+                    # print("%0.2f" % percentage, " of instances are prequentially processed!", end="\r")
 
                     learner_error_rate = PredictionEvaluator.calculate(TornadoDic.ERROR_RATE,
                                                                        self.learner.get_global_confusion_matrix())
@@ -117,12 +129,19 @@ class PrequentialDriftEvaluator:
                     self.learner.reset()
                     self.drift_detector.reset()
 
+                    serverMessage = 'true'
+                    conn.sendall(serverMessage.encode())
+                    conn.close()
+
                     continue
 
-                if self.learner.LEARNER_TYPE == TornadoDic.TRAINABLE:
-                    self.learner.do_training(r)
-                else:
-                    self.learner.do_loading(r)
+                # if self.learner.LEARNER_TYPE == TornadoDic.TRAINABLE:
+                #     self.learner.do_training(r)
+                # else:
+                #     self.learner.do_loading(r)
+                serverMessage = 'false'
+                conn.sendall(serverMessage.encode())
+                conn.close()
             else:
                 if self.learner.LEARNER_TYPE == TornadoDic.TRAINABLE:
                     self.learner.do_training(r)

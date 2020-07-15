@@ -1,0 +1,6 @@
+pylint
+numpy
+matplotlib
+scipy
+pympler
+request
